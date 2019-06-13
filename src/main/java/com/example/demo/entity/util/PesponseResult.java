@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 public class PesponseResult<T> implements Serializable {
 
-    private static final long serialVersionUID = -1626793180717240861L;
-    
+    private static final long serialVersionUID = -6185124879935579311L;
+
     private Integer state;
     private String message;
     private T data;
 
-
     public PesponseResult() {
+
         super();
     }
 

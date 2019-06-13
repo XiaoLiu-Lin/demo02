@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.util.PesponseResult;
 import com.example.demo.service.ex.TestException;
+import com.example.demo.service.ex.UserNameException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -21,6 +22,9 @@ public class BaseController {
         if (e instanceof TestException) {
             // 400-用户名冲突
             rr.setState(400);
+        }else if (e instanceof UserNameException) {
+            //401-用户注册异常
+            rr.setState(401);
         }
         return rr;
     }

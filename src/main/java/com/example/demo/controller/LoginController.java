@@ -31,6 +31,18 @@ public class LoginController extends BaseController{
            session.setAttribute("userName",login.getUserName());
 
             return new PesponseResult<Login>(SUCCESS,login);
-
     }
+
+
+    /*
+    * 注册新用户
+    * */
+   @GetMapping("/insert")
+    public PesponseResult<Integer> addUser(Login login){
+       loginService.addUser2(login);
+    return new PesponseResult<Integer>(SUCCESS);
+    }
+
+
+
 }
