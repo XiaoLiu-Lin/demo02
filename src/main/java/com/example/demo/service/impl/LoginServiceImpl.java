@@ -2,19 +2,22 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Login;
 import com.example.demo.mapper.LoginMapper;
+import com.example.demo.redis.redisTemplete.JedisUtil;
 import com.example.demo.service.LoginService;
 import com.example.demo.service.ex.TestException;
 import com.example.demo.service.ex.UserNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 
 @Service
-public class LoginServiceImpl implements LoginService {
+public class LoginServiceImpl  implements LoginService {
 
     @Autowired
     private LoginMapper loginMapper;
 
+    Jedis jedis = JedisUtil.getInstance ().getPool ().getResource ();
     //    登录
     @Override
     public Login getLogin(String userName, String password) throws TestException {
@@ -27,6 +30,9 @@ public class LoginServiceImpl implements LoginService {
         if (list.getPassword().equals(password)) {
 //      登录成功返回参数
             list.setPassword(null);
+            jedis.set("userName",userName);
+            jedis.set("password",password);
+            JedisUtil.getInstance ().returnJedis (jedis);
             return list;
         } else {
 //            登录失败抛出异常
@@ -61,6 +67,35 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
+    /**
+     * 根据id查找修改用户资料
+     * **/
+    @Override
+    public Integer updateUser(Integer id,Login login) {
+        Login data = addId(id);
+        if (data == null) {
+            throw new UserNameException("此用户不存在或被删除！");
+        }
+       Integer row =  loginMapper.updateUser(id,login);
+        if (row !=1) {
+            throw new UserNameException("此用户不存在或被删除！");
+        }
+        return row;
+    }
+
+
+    /**
+     * 根据用户id查找用户数据
+     * */
+    @Override
+    public Login addId(Integer id) {
+        if (id == null) {
+            throw new UserNameException("此用户不存在或被删除！");
+        }
+        Login login = loginMapper.addId(id);
+
+        return login;
+    }
 
     public void addUser(Login login) throws UserNameException {
         Integer rows = loginMapper.addUsers(login);
