@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.Login;
 import com.example.demo.entity.util.PesponseResult;
 import com.example.demo.service.LoginService;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +61,6 @@ public class LoginController extends BaseController{
      * */
     @GetMapping("/update")
     public PesponseResult<Integer> updateUser(Integer id,Login login ){
-        Login data = loginService.addId(id);
         Integer rows = loginService.updateUser(id,login);
         return new PesponseResult<>(SUCCESS,rows);
     }

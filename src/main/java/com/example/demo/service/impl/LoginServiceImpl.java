@@ -72,15 +72,12 @@ public class LoginServiceImpl  implements LoginService {
      * **/
     @Override
     public Integer updateUser(Integer id,Login login) {
-        Login data = addId(id);
-        if (data == null) {
+
+       Integer rows =  loginMapper.updateUser(id,login);
+        if (rows !=1) {
             throw new UserNameException("此用户不存在或被删除！");
         }
-       Integer row =  loginMapper.updateUser(id,login);
-        if (row !=1) {
-            throw new UserNameException("此用户不存在或被删除！");
-        }
-        return row;
+        return rows;
     }
 
 
